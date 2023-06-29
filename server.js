@@ -39,15 +39,10 @@ app.set("port", port);
 /*
 LLAMANDO A LAS RUTAS:
  */
-// usersRoutes(app, upload);
+usersRoutes(app, upload);
 
-app.get('/', (req, res) => {
-    return res.json({
-        msg: 'Ruta Principal'
-    });
-})
 
-server.listen(port, '192.168.0.21', () => {
+server.listen(port, () => {
     console.log("Aplicacion de Node JS " + port + " iniciada.......");
 });
 

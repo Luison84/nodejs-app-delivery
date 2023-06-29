@@ -1,4 +1,4 @@
 module.exports = {
-    productio: false,
+    production: false,
     id_developer: 0
 }
