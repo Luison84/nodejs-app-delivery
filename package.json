@@ -1,0 +1,29 @@
+{
+  "name": "delivery-flutter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^6.11.0",
+    "bluebird": "^3.7.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.9.0",
+    "http": "^0.0.1-security",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "pg-promise": "^11.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
