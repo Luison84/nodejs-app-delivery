@@ -21,7 +21,7 @@ const usersRoutes = require('./routes/usersRoutes');
 
 const app = express();
 const server = http.createServer(app)
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 /*Configuracion del Servidor */
 app.use(logger('dev'));
@@ -39,10 +39,16 @@ app.set("port", port);
 /*
 LLAMANDO A LAS RUTAS:
  */
+app.get('/', (req, res) => {
+    return res.json({
+        'msg': 'Ruta Principal del Proyecto'
+    })
+});
+
 usersRoutes(app, upload);
 
 
-server.listen(port, () => {
+server.listen(port,() => {
     console.log("Aplicacion de Node JS " + port + " iniciada.......");
 });
 
