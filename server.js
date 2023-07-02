@@ -20,6 +20,7 @@ const upload = multer({
 });
 
 const usersRoutes = require('./routes/usersRoutes');
+const categoriesRoutes = require('./routes/categoriesRoutes');
 
 const app = express();
 const server = http.createServer(app)
@@ -52,9 +53,9 @@ app.get('/', (req, res) => {
 });
 
 usersRoutes(app, upload);
+categoriesRoutes(app);
 
-
-server.listen(port,'192.168.0.21',() => {
+server.listen(port,() => {
     console.log("Aplicacion de Node JS " + port + " iniciada.......");
 });
 
