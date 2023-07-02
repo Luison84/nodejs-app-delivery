@@ -112,11 +112,13 @@ module.exports = {
             }
 
             if(User.isPasswordMatched(password, myUser.password)){
+
                 const token = jwt.sign({
                     id: myUser.id, 
                     email: myUser.email
                 }, keys.secretOrKey, {
-                    // expiresIn: (60*60*24) //1hora
+                     expiresIn: (60*60*24) //1 dia
+                    // expiresIn: (60*1)
                 });
 
                 const data = {
@@ -132,6 +134,7 @@ module.exports = {
 
                 console.log(`USUARIO ENVIADO ${data}`);
                 
+                await User.updateToken(myUser.id, `JWT ${token}`);                
 
                 return res.status(201).json({
                     success: true,
@@ -155,5 +158,85 @@ module.exports = {
             });
         }
 
+    },
+
+    async update(req, res, next) {
+
+        try {
+            
+            const user = JSON.parse(req.body.user);
+            console.log(user);
+
+            const files = req.files;
+
+            if(files.length > 0){
+                const pathImage = `image_${Date.now() }`; //Nombre del archivo
+                const url = await storage(files[0], pathImage);
+
+                if(url != undefined && url != null){
+                    user.image = url;
+                }
+            }
+
+            //REGISTRANDO AL USUARIO EN LA BD
+            await User.update(user);
+            
+            return res.status(201).json({
+                success: true,
+                message: 'El usuario se actualizó correctamente'
+            })
+
+        } catch (error) {
+
+            console.log(`Error: ${error}`);
+            return res.status(501).json({
+                success: false,
+                message: 'Error al actualizar el usuario'
+            })
+
+        }
+    },
+
+    async findByUserId(req, res, next) {
+
+        try {
+            
+            const id = req.params.id;
+            const data = await User.findByUserId(id);
+            // console.log(`Usuarios: ${data}`);
+            return res.status(201).json(data);
+
+        } catch (error) {
+
+            console.log(`Error: ${error}`);
+            return res.status(501).json({
+                success: false,
+                message: 'Error al obtener el usuario por Id'
+            })
+
+        }
+    },
+
+    async logout(req, res, next){
+
+        try {
+            const id = req.body.id;
+
+            await User.updateToken(id, null);
+
+            return res.status(201).json({
+                success: true,
+                message: 'Sesion cerrada correctamente'
+            })
+
+        } catch (e) {
+            console.log(`Error: ${error}`)
+            
+            return res.status(501).json({
+                success: false,
+                message: 'Error al cerrar sesion',
+                error: error
+            });
+        }
     }
 }

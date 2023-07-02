@@ -10,11 +10,12 @@ module.exports = function(passport){
     opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
     opts.secretOrKey = keys.secretOrKey;
     
-    passport.use(new JwtStrategy(opts, (jtw_payload, done) => {
+    passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
 
-        console.log("entro aqui")
-        User.findById(jtw_payload.id, (err, user) => {
+        User.findById(jwt_payload.id, (err, user) => {
 
+            console.log("entro aqui findById");
+            
             if(err) return done(err, false);
 
             if(user){

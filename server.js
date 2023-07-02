@@ -5,6 +5,8 @@ const cors =require('cors');
 const multer = require('multer');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
+const passport = require('passport');
+const session = require('express-session');
 
 /**
 INICIALIZAR FIREBASE ADMIN
@@ -31,6 +33,10 @@ app.use(express.urlencoded({
 }));
 
 app.use(cors());
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport);
 
 app.disable('x-powered-by');
 
@@ -48,7 +54,7 @@ app.get('/', (req, res) => {
 usersRoutes(app, upload);
 
 
-server.listen(port,() => {
+server.listen(port,'192.168.0.21',() => {
     console.log("Aplicacion de Node JS " + port + " iniciada.......");
 });
 

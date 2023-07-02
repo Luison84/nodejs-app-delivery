@@ -103,4 +103,82 @@ User.isPasswordMatched = (userPassword, hash) => {
     
 }
 
+User.update = (user) => {
+    const sql = 
+    `
+    UPDATE
+        users
+    SET name = $2,
+        lastname = $3,
+        phone = $4,
+        image = $5,
+        updated_at = $6
+    WHERE 
+        id = $1
+    `;
+
+    return db.none(sql, [
+        user.id,
+        user.name,
+        user.lastname,
+        user.phone,
+        user.image,
+        new Date()
+    ]);
+}
+
+User.findByUserId = (id) => {
+
+    const sql = `
+    select 
+            U.id,
+            U.email,
+            U.name,
+            U.lastname,
+            U.image,
+            U.phone,
+            U.password,
+            U.sesion_token,
+            json_agg(
+                json_build_object(
+                    'id', R.id,
+                    'name', R.name,
+                    'image', R.image,
+                    'route', R.route
+                )
+            )as roles
+        from
+            users AS U
+        inner join 
+            user_has_roles AS UHR
+        on 
+            U.id = UHR.id_user
+        inner join 
+            roles AS R
+        on R.id = UHR.id_rol
+        where U.id = $1
+    group by U.id`;
+    
+    return db.oneOrNone(sql,id);
+    
+}
+
+User.updateToken = (id, token) => {
+    
+    const sql = 
+    `
+    UPDATE
+        users
+    SET 
+        sesion_token = $2
+    WHERE 
+        id = $1
+    `;
+
+    return db.none(sql, [
+        id,
+        token
+    ]);
+}
+
 module.exports = User;
